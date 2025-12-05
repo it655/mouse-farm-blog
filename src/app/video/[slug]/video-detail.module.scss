@@ -1,0 +1,348 @@
+/* src/app/video/[slug]/video-detail.module.scss */
+
+// Biến màu (giống YouTube)
+$bg-color: #ffffff;
+$text-primary: #0f0f0f;
+$text-secondary: #606060;
+$hover-bg: #e5e5e5;
+$btn-bg: #f2f2f2;
+$border-color: #e5e5e5;
+$primary-color: #ea580c; // Màu cam của web bạn
+$emerald: #059669;
+
+.container {
+  min-height: 100vh;
+  background-color: $bg-color;
+  font-family: sans-serif;
+}
+
+.mainLayout {
+  max-width: 1700px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  // Responsive: Desktop chia 2 cột
+  @media (min-width: 1024px) {
+    flex-direction: row;
+    padding: 1.5rem 2rem;
+  }
+}
+
+/* --- CỘT TRÁI: VIDEO & INFO --- */
+.leftColumn {
+  flex: 1;
+  min-width: 0; // Fix lỗi flexbox bị tràn
+}
+
+.videoWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  background-color: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; // Giữ tỉ lệ video không bị méo
+  }
+
+  .noSource {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.5);
+    
+    p { margin-top: 0.5rem; }
+  }
+}
+
+.videoTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: $text-primary;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+
+  @media (min-width: 768px) {
+    font-size: 1.5rem;
+  }
+}
+
+.metaBar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid $border-color;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.channelInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: $primary-color;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.125rem;
+  }
+
+  .channelName {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 700;
+    color: $text-primary;
+    font-size: 1rem;
+  }
+
+  .subText {
+    font-size: 0.75rem;
+    color: $text-secondary;
+  }
+
+  .subscribeBtn {
+    margin-left: 1rem;
+    background-color: #0f0f0f;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 99px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+      background-color: #272727;
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto; /* Cho phép cuộn ngang trên mobile */
+  
+  // Ẩn thanh cuộn
+  &::-webkit-scrollbar { display: none; }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  .btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: $btn-bg;
+    color: $text-primary;
+    padding: 0.5rem 1rem;
+    border-radius: 99px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: $hover-bg;
+    }
+  }
+
+  .iconBtn {
+    @extend .btn;
+    padding: 0.5rem;
+    border-radius: 50%;
+  }
+}
+
+.descriptionBox {
+  margin-top: 1rem;
+  background-color: $btn-bg;
+  border-radius: 12px;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background-color: $hover-bg;
+  }
+
+  .statsLine {
+    display: flex;
+    gap: 0.5rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin-bottom: 0.5rem;
+
+    .hashtag {
+      color: $text-secondary;
+    }
+  }
+
+  .descText {
+    color: $text-primary;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+
+  .techSpecs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0,0,0,0.1);
+
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .specItem {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+
+      .label {
+        font-size: 0.75rem;
+        color: $text-secondary;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+      }
+
+      .value {
+        font-weight: 500;
+        color: $text-primary;
+      }
+
+      .value.secured {
+        color: $emerald;
+      }
+    }
+  }
+}
+
+/* --- CỘT PHẢI: RELATED VIDEOS --- */
+.rightColumn {
+  width: 100%;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  @media (min-width: 1024px) {
+    width: 400px;
+  }
+
+  h3 {
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: $text-primary;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.relatedItem {
+  display: flex;
+  gap: 0.5rem;
+  text-decoration: none;
+  group: true;
+
+  .thumbWrapper {
+    position: relative;
+    width: 168px;
+    height: 94px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #ccc;
+
+    img {
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+
+    &:hover img {
+      transform: scale(1.05);
+    }
+
+    .badge {
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      font-size: 0.625rem;
+      font-weight: 700;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    justify-content: space-between;
+    h4 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: $text-primary;
+      line-height: 1.2;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin: 0!important;
+    }
+
+    .channel {
+      font-size: 0.75rem;
+      color: $text-secondary;
+    }
+
+    .meta {
+      font-size: 0.75rem;
+      color: $text-secondary;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+  }
+}
+
+.emptyState {
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: $text-secondary;
+  background-color: $btn-bg;
+  border-radius: 8px;
+  border: 1px dashed $border-color;
+}
