@@ -1,8 +1,6 @@
 import { useState } from 'react';
-
 import toast from 'react-hot-toast';
 import { client } from '../sanity/lib/client';
-
 export const useUpload = () => {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0); // Thêm progress bar cho xịn
