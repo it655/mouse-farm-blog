@@ -13,7 +13,7 @@ async function getAllCategories() {
 
 async function getVideosByCategory(category: string) {
     const query = `*[_type == "archiveVideo" && category == "${category}"] | order(recordedAt desc) [0...4] {
-    _id, title, slug, category, thumbnail, recordedAt,
+    _id, title, slug, category, thumbnail, recordedAt,description,
     "videoUrl": videoFile.asset->url
   }`;
     try { return await client.fetch(query, {}, { cache: 'no-store' }); } catch (error) { return []; }
@@ -22,7 +22,6 @@ async function getVideosByCategory(category: string) {
 
 const SectionGrid = ({ title, videos, linkUrl }: { title: string, videos: any[], linkUrl: string }) => {
     if (!videos || videos.length === 0) return null;
-
     return (
         <section className={styles.section}>
             <div className={styles.header}>
@@ -42,6 +41,8 @@ const SectionGrid = ({ title, videos, linkUrl }: { title: string, videos: any[],
 const DynamicCategorySection = async ({ category }: { category: string }) => {
     const videos = await getVideosByCategory(category);
     // Format tên đẹp (viết hoa chữ đầu)
+    console.log(videos);
+    
     const displayTitle = category.charAt(0).toUpperCase() + category.slice(1);
     return <SectionGrid title={displayTitle} videos={videos} linkUrl={`/category/${category}`} />;
 };

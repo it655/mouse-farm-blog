@@ -60,6 +60,11 @@ export default defineType({
       type: 'datetime',
       initialValue: (new Date()).toISOString(),
     }),
+    defineField({
+      name: 'description',
+      title: 'Mô tả',
+      type: 'string',
+    }),
     // Phần này quan trọng để kháng cáo:
     defineField({
       name: 'technicalSpecs',
@@ -73,7 +78,7 @@ export default defineType({
       ]
     }),
     defineField({
-      name: 'copyrightStatus',
+      name: 'status',
       title: 'Trạng thái bản quyền',
       type: 'string',
       options: {
@@ -85,6 +90,20 @@ export default defineType({
         layout: 'radio'
       },
       initialValue: 'protected'
-    })
+    }),
+    /* defineField({
+      name: 'status',
+      title: 'Trạng thái',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Protected (Đã bảo vệ)', value: 'protected' },
+          { title: 'Dispute Pending (Đang tranh chấp)', value: 'pending' },
+          { title: 'Released (Đã công chiếu)', value: 'released' },
+        ],
+        layout: 'radio'
+      },
+      initialValue: 'protected'
+    }) */
   ],
 })

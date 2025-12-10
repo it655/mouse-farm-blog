@@ -15,7 +15,8 @@ export default function VideoUploadForm() {
     description: '',
     videoAssetId: '',
     authorName: '',
-    authorEmail: ''
+    authorEmail: '',
+    status:''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { uploadFileToSanity, uploading } = useUpload();
@@ -53,7 +54,7 @@ export default function VideoUploadForm() {
       toast.success('Đã gửi thành công! Admin sẽ duyệt video của bạn.', { id: toastId });
       
       // Reset form
-      setFormData({ title: '', description: '', videoAssetId: '', authorName: '', authorEmail: '' });
+      setFormData({ title: '', description: '', videoAssetId: '', authorName: '', authorEmail: '',status:'pending' });
 
     } catch (error) {
       toast.error('Có lỗi xảy ra. Vui lòng thử lại.', { id: toastId });
