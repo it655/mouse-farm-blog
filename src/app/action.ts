@@ -21,7 +21,7 @@ export async function sendContactEmail(formData: FormData) {
     const data = await resend.emails.send({
       from: 'Contact Form <onboarding@resend.dev>', // Email mặc định của Resend (Dùng được ngay)
       to: 'tuandat2514.work@gmail.com', // <--- THAY EMAIL CỦA BẠN VÀO ĐÂY ĐỂ NHẬN THƯ
-      reply_to: email, // Để bấm Reply là trả lời người gửi luôn
+      replyTo: email, // Để bấm Reply là trả lời người gửi luôn
       subject: `[MouseFarm] New Contact: ${interest} from ${name}`,
       html: `
         <h2>New Partnership Inquiry</h2>

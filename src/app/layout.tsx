@@ -18,7 +18,7 @@ const oswald = Oswald({ subsets: ['latin'], weight: ['400', '700'], variable: '-
 export const metadata: Metadata = {
   title: "MOUSE FARM ARCHIVE | ORIGINAL SOURCE",
   description: "Official Original Video Archive. Content ID Protection & Source Storage. Unauthorized use is prohibited.",
-  icons:"logo.png"
+  icons:"icon.png"
 };
 
 export default function RootLayout({
