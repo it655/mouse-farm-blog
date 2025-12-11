@@ -10,12 +10,12 @@ export const useUpload = () => {
     
     // Validate
     if (!file.type.startsWith('video/')) {
-      toast.error('Chỉ được upload video!');
+      toast.error('Only videos are allowed to be uploaded!');
       return null;
     }
     // Sanity giới hạn file size tùy gói (Free ~100MB, Plus ~2GB). Cẩn thận file quá lớn.
     if (file.size > 100 * 1024 * 1024) { 
-      toast.error('File quá lớn (Max 100MB cho bản Demo)');
+      toast.error('The file is too large (Maximum 100MB)');
       return null;
     }
 
@@ -35,7 +35,7 @@ export const useUpload = () => {
 
     } catch (error: any) {
       console.error('Upload Error:', error);
-      toast.error('Lỗi upload lên Sanity');
+      toast.error('Upload Error');
       return null;
     } finally {
       setUploading(false);
