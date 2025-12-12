@@ -71,7 +71,7 @@ export default async function VideoDetailPage({ params }: { params: Promise<{ sl
                                 height="100%"
                                 controls={true}
                                 playing={true}
-                                config={{ youtube: { playerVars: { showinfo: 0, modestbranding: 1 } } }}
+                                config={{ youtube: { showinfo: 0, modestbranding: 1 } }}
                             />
                         ) : (
                             <div className="text-white">Video not found</div>
