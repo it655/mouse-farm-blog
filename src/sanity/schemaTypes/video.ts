@@ -25,7 +25,11 @@ export default defineType({
       title: 'Bunny Video ID',
       type: 'string',
       description: 'ID của video trên Bunny Stream (VD: xxxxx-xxxxx...)',
-      validation: (rule) => rule.required()
+    }),
+    defineField({
+      name: 'youtubeUrl',
+      title: 'YouTube URL',
+      type: 'url',
     }),
     defineField({
       name: 'thumbnail',

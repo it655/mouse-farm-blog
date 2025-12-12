@@ -1,57 +1,49 @@
 'use client';
 
 import React, { useState } from 'react';
-
-import { FaCloudUploadAlt, FaSpinner, FaPaperPlane, FaCheckCircle } from 'react-icons/fa';
+import { FaCloudUploadAlt, FaSpinner, FaPaperPlane, FaCheckCircle, FaYoutube } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 
-// Import CSS Module
+// Import SCSS Module
 import styles from './videoUploadForm.module.scss';
 import { useUpload } from '@/src/hooks/useUpload';
 
 export default function VideoUploadForm() {
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    bunnyVideoId: '',
-    authorName: '',
-    authorEmail: '',
-    status: ''
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { uploadVideoToBunny, uploading, progress } = useUpload();;
+  // Tab chuyển đổi: 'upload' hoặc 'youtube'
+  const [activeTab, setActiveTab] = useState<'upload' | 'youtube'>('upload');
 
+  const [formData, setFormData] = useState({
+    title: '', description: '', authorName: '', authorEmail: '',
+    bunnyVideoId: '', 
+    youtubeUrl: '' 
+  });
+  
+  const { uploadVideoToBunny, uploading, progress } = useUpload();
+
+  // Xử lý upload file (Bunny)
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
-
-    // Validate nhanh
-    if (!file.type.startsWith('video/')) {
-      toast.error('Vui lòng chọn file video!');
-      return;
-    }
-
-    // Gọi hàm upload (Truyền thêm title tạm để Bunny tạo placeholder)
-    // Nếu chưa nhập title thì lấy tên file
-    const videoTitle = formData.title || file.name;
-
-    const videoId = await uploadVideoToBunny(file, videoTitle);
-
-    if (videoId) {
-      setFormData({ ...formData, bunnyVideoId: videoId });
-      toast.success('Upload successful');
+    if (file) {
+      // Gọi hook upload
+      const videoTitle = formData.title || file.name;
+      const videoId = await uploadVideoToBunny(file, videoTitle);
+      
+      if (videoId) {
+        setFormData({ ...formData, bunnyVideoId: videoId, youtubeUrl: '' }); // Xóa youtube nếu có
+        toast.success('Upload thành công!');
+      }
     }
   };
 
+  // Xử lý submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate
+    if (activeTab === 'upload' && !formData.bunnyVideoId) return toast.error("Vui lòng upload video!");
+    if (activeTab === 'youtube' && !formData.youtubeUrl) return toast.error("Vui lòng dán link YouTube!");
 
-    if (!formData.bunnyVideoId) {
-      toast.error("Please wait for the video to finish uploading!");
-      return;
-    }
-
-    const toastId = toast.loading("Sending information...");
+    const toastId = toast.loading("Sending...");
 
     try {
       const res = await fetch('/api/submit', {
@@ -60,94 +52,125 @@ export default function VideoUploadForm() {
         body: JSON.stringify(formData),
       });
 
-      if (!res.ok) throw new Error('Send failure');
+      if (!res.ok) throw new Error('Failed');
 
-      toast.success("Submission successful! Admin will review the post.", { id: toastId });
-
+      toast.success("Gửi thành công!", { id: toastId });
       // Reset form
-      setFormData({ title: '', description: '', bunnyVideoId: '', authorName: '', authorEmail: '' });
+      setFormData({ title: '', description: '', bunnyVideoId: '', youtubeUrl: '', authorName: '', authorEmail: '' });
 
     } catch (error) {
-      toast.error("Error", { id: toastId });
+      toast.error("Lỗi gửi form.", { id: toastId });
     }
   };
 
   return (
     <div className={styles.container}>
-
-      {/* Header */}
+      
       <div className={styles.header}>
-        <h2>
-          Submit Your <span>Video</span>
-        </h2>
-        <p>Share your best hunting moments with our global community.</p>
+        <h2>Submit Your <span>Footage</span></h2>
+        <p>Chia sẻ video săn bắn ấn tượng của bạn.</p>
       </div>
 
       <form onSubmit={handleSubmit} className={styles.form}>
+        
+        {/* --- TABS CHUYỂN ĐỔI --- */}
+        <div className={styles.tabs}>
+          <button
+            type="button"
+            onClick={() => setActiveTab('upload')}
+            className={`${styles.tabBtn} ${activeTab === 'upload' ? styles.active : styles.inactive}`}
+          >
+            <FaCloudUploadAlt /> Upload File
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('youtube')}
+            className={`${styles.tabBtn} ${activeTab === 'youtube' ? styles.youtubeActive : styles.inactive}`}
+          >
+            <FaYoutube /> YouTube Link
+          </button>
+        </div>
 
-        {/* --- KHU VỰC UPLOAD --- */}
+        {/* --- KHU VỰC NHẬP VIDEO --- */}
         <div className={styles.uploadArea}>
-           <input 
-             type="file" accept="video/*" onChange={handleFileChange}
-             disabled={uploading || !!formData.bunnyVideoId}
-           />
-           
-           {uploading ? (
-             <div className={styles.loadingState}>
-               <FaSpinner className={styles.spinner} />
-               <span>Uploading to Bunny... {progress}%</span>
-               {/* Progress bar visual */}
-               <div className="w-full h-1 bg-zinc-700 mt-2 rounded overflow-hidden">
-                  <div className="h-full bg-orange-600 transition-all duration-300" style={{ width: `${progress}%` }}></div>
-               </div>
-             </div>
-           ) : formData.bunnyVideoId ? (
-             <div className={styles.successState}>
-                <FaCheckCircle className={styles.checkIcon} />
-                <p className={styles.successText}>Video Uploaded!</p>
-                <p className={styles.fileName}>ID: {formData.bunnyVideoId}</p>
-                
-                {/* Nút Xóa / Upload lại */}
-                <button
-                   type="button"
-                   onClick={() => setFormData({ ...formData, bunnyVideoId: '' })}
-                   className={styles.anotherFile}  
-                >
-                   Upload another file
-                </button>
-             </div>
+           {activeTab === 'upload' ? (
+             // Giao diện Upload
+             <>
+               <input 
+                 type="file" accept="video/*" onChange={handleFileChange} 
+                 disabled={uploading || !!formData.bunnyVideoId} 
+               />
+               
+               {uploading ? (
+                 <div className={styles.loadingState}>
+                   <FaSpinner className={styles.spinner} />
+                   <span>Uploading {progress}%...</span>
+                   <div className={styles.progressContainer}>
+                      <div className={styles.progressBar} style={{ width: `${progress}%` }}></div>
+                   </div>
+                 </div>
+               ) : formData.bunnyVideoId ? (
+                 <div className={styles.successState}>
+                    <FaCheckCircle className={styles.checkIcon} />
+                    <p className={styles.successText}>Video Uploaded!</p>
+                    <p className={styles.fileName}>ID: {formData.bunnyVideoId}</p>
+                    <button type="button" onClick={() => setFormData({ ...formData, bunnyVideoId: '' })} className={styles.deleteBtn}>
+                       Xóa / Upload lại
+                    </button>
+                 </div>
+               ) : (
+                 <div className={styles.defaultState}>
+                   <FaCloudUploadAlt className={styles.icon} />
+                   <h3 className={styles.ctaText}>Drag & Drop Video</h3>
+                   <p className={styles.subText}>Max 1GB</p>
+                 </div>
+               )}
+             </>
            ) : (
-             <div className={styles.defaultState}>
-               <FaCloudUploadAlt className={styles.icon} />
-               <h3 className={styles.ctaText}>Drag & Drop Video</h3>
-               <p className={styles.subText}>Direct to Bunny Stream (Max 1GB)</p>
+             // Giao diện nhập Youtube
+             <div className={styles.youtubeInputWrapper}>
+                <FaYoutube className={styles.ytIcon} />
+                <input 
+                  type="text" 
+                  placeholder="https://www.youtube.com/watch?v=..." 
+                  value={formData.youtubeUrl}
+                  onChange={(e) => setFormData({ ...formData, youtubeUrl: e.target.value, bunnyVideoId: '' })}
+                />
              </div>
            )}
         </div>
 
-        {/* --- CÁC TRƯỜNG THÔNG TIN --- */}
+        {/* --- CÁC Ô NHẬP LIỆU KHÁC --- */}
         <div className={styles.grid}>
           <div className={styles.field}>
             <label>Video Title</label>
-            <input
+            <input 
               type="text" required
               value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              placeholder="E.g. Epic Thermal Shot..."
+              onChange={(e) => setFormData({...formData, title: e.target.value})}
             />
           </div>
           <div className={styles.field}>
-            <label>Tên của bạn</label>
-            <input
+            <label>Your Name</label>
+            <input 
               type="text" required
               value={formData.authorName}
-              onChange={(e) => setFormData({ ...formData, authorName: e.target.value })}
-              placeholder="E.g. John Doe"
+              onChange={(e) => setFormData({...formData, authorName: e.target.value})}
             />
           </div>
         </div>
 
+        {/* Email Field */}
         <div className={styles.field}>
+           <label>Your Email</label>
+           <input 
+             type="email" required
+             value={formData.authorEmail}
+             onChange={(e) => setFormData({...formData, authorEmail: e.target.value})}
+             placeholder="john@example.com"
+           />
+        </div>
+            <div className={styles.field}>
           <label>Description</label>
           <textarea
             rows={3}
@@ -156,13 +179,7 @@ export default function VideoUploadForm() {
             placeholder="Tell us about the context..."
           />
         </div>
-
-        {/* --- NÚT SUBMIT --- */}
-        <button
-          type="submit"
-          disabled={!formData.bunnyVideoId || isSubmitting}
-          className={styles.submitBtn}
-        >
+        <button type="submit" className={styles.submitBtn}>
           <FaPaperPlane /> SEND FOOTAGE
         </button>
 

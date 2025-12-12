@@ -87,7 +87,7 @@ export default function VideoCard({ video }: VideoCardProps) {
           <h3 className="text-base font-bold leading-snug text-white transition-colors group-hover:text-orange-500 line-clamp-2">
             {video.title}
           </h3>
-          <span style={{fontSize:10,color:"#a2a2a2"}}>{video.description}</span>
+          <span style={{fontSize:10,color:"#a2a2a2",display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical",maxHeight:"50px"}}>{video.description}</span>
         </div>
 
       </article>

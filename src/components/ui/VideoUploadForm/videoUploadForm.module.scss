@@ -10,10 +10,9 @@ $card-bg: #18181b; // zinc-900
 
 .container {
   background-color: $card-bg;
-//   border: 1px solid $border-color;
+  border: 1px solid $border-color;
   border-radius: 12px;
   padding: 2rem;
-  
   max-width: 42rem; // ~672px
   margin: 0 auto;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
@@ -50,6 +49,49 @@ $card-bg: #18181b; // zinc-900
   gap: 1.5rem;
 }
 
+/* --- TAB CHUYỂN ĐỔI --- */
+.tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  .tabBtn {
+    flex: 1;
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+
+    &.active {
+      background-color: $accent-color; // Cam
+      color: $text-white;
+    }
+
+    &.inactive {
+      background-color: #27272a; // zinc-800
+      color: #71717a; // zinc-500
+
+      &:hover {
+        background-color: #3f3f46; // zinc-700
+        color: $text-muted;
+      }
+    }
+    
+    // Style riêng cho nút Youtube Active
+    &.youtubeActive {
+        background-color: #dc2626; // Red-600
+        color: white;
+    }
+  }
+}
+
 /* --- UPLOAD AREA --- */
 .uploadArea {
   position: relative;
@@ -59,18 +101,15 @@ $card-bg: #18181b; // zinc-900
   text-align: center;
   background-color: rgba(9, 9, 11, 0.5); // zinc-950/50
   transition: all 0.2s;
-  cursor: pointer;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   &:hover {
     border-color: $accent-color;
-
-    .icon {
-      color: $accent-color;
-    }
-    
-    .ctaText {
-      color: $accent-color;
-    }
+    .icon { color: $accent-color; }
+    .ctaText { color: $accent-color; }
   }
 
   /* Input file ẩn */
@@ -82,10 +121,7 @@ $card-bg: #18181b; // zinc-900
     opacity: 0;
     cursor: pointer;
     z-index: 10;
-    
-    &:disabled {
-      cursor: not-allowed;
-    }
+    &:disabled { cursor: not-allowed; }
   }
 
   /* Trạng thái mặc định */
@@ -95,24 +131,20 @@ $card-bg: #18181b; // zinc-900
     align-items: center;
 
     .icon {
-      font-size: 3.75rem; // 6xl
-      color: #52525b; // zinc-600
+      font-size: 3rem; 
+      color: #52525b; 
       margin-bottom: 1rem;
       transition: color 0.2s;
     }
 
     .ctaText {
-      font-size: 1.125rem; // lg
+      font-size: 1.125rem;
       font-weight: 700;
       color: $text-white;
       margin-bottom: 0.25rem;
-      transition: color 0.2s;
     }
 
-    .subText {
-      font-size: 0.75rem; // xs
-      color: #52525b; // zinc-600
-    }
+    .subText { font-size: 0.75rem; color: #52525b; }
   }
 
   /* Trạng thái Loading */
@@ -121,46 +153,76 @@ $card-bg: #18181b; // zinc-900
     flex-direction: column;
     align-items: center;
     color: $accent-color;
+    width: 100%;
 
     .spinner {
-      font-size: 2.25rem; // 4xl
+      font-size: 2rem;
       margin-bottom: 0.75rem;
       animation: spin 1s linear infinite;
     }
-
-    span {
-      font-weight: 700;
+    
+    .progressContainer {
+       width: 80%;
+       height: 4px;
+       background-color: #27272a;
+       border-radius: 2px;
+       margin-top: 0.5rem;
+       overflow: hidden;
+       
+       .progressBar {
+          height: 100%;
+          background-color: $accent-color;
+          transition: width 0.3s ease;
+       }
     }
   }
 
   /* Trạng thái Success */
   .successState {
     color: #22c55e; // green-500
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 20;
 
-    .checkIcon {
-      font-size: 3rem; // 5xl
-      margin-bottom: 0.75rem;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-    }
+    .checkIcon { font-size: 3rem; margin-bottom: 0.5rem; }
+    .successText { font-weight: 700; font-size: 1rem; }
+    .fileName { font-size: 0.75rem; color: $text-muted; margin-top: 0.25rem; }
 
-    .successText {
-      font-weight: 700;
-      font-size: 1rem;
+    .deleteBtn {
+      margin-top: 0.75rem;
+      font-size: 0.75rem;
+      color: #ef4444; // red-500
+      text-decoration: underline;
+      cursor: pointer;
+      background: none;
+      border: none;
+      &:hover { color: #f87171; }
     }
-
-    .fileName {
-      font-size: 0.75rem; // xs
-      color: $text-muted;
-      margin-top: 0.25rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 20rem;
-      margin-left: auto;
-      margin-right: auto;
-    }
+  }
+  
+  /* Youtube Input Area */
+  .youtubeInputWrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      z-index: 20; /* Để click được input */
+      
+      .ytIcon { font-size: 3rem; color: #dc2626; margin-bottom: 1rem; }
+      
+      input {
+          width: 80%;
+          background-color: #000;
+          border: 1px solid $border-color;
+          padding: 0.75rem;
+          color: $text-white;
+          text-align: center;
+          border-radius: 6px;
+          outline: none;
+          
+          &:focus { border-color: #dc2626; }
+      }
   }
 }
 
@@ -169,16 +231,13 @@ $card-bg: #18181b; // zinc-900
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
-
-  @media (min-width: 768px) {
-    grid-template-columns: 1fr 1fr;
-  }
+  @media (min-width: 768px) { grid-template-columns: 1fr 1fr; }
 }
 
 .field {
   label {
     display: block;
-    font-size: 0.75rem; // xs
+    font-size: 0.75rem;
     font-weight: 700;
     color: $text-muted;
     text-transform: uppercase;
@@ -186,6 +245,7 @@ $card-bg: #18181b; // zinc-900
   }
 
   input, textarea {
+    box-sizing: border-box;
     width: 100%;
     background-color: #000;
     border: 1px solid $border-color;
@@ -195,17 +255,9 @@ $card-bg: #18181b; // zinc-900
     font-size: 1rem;
     outline: none;
     transition: border-color 0.2s;
-    box-sizing: border-box;
-
-    &:focus {
-      border-color: $accent-color;
-    }
+    &:focus { border-color: $accent-color; }
   }
-
-  textarea {
-    resize: none;
-    min-height: 80px;
-  }
+  textarea { resize: none; min-height: 80px; }
 }
 
 /* --- SUBMIT BUTTON --- */
@@ -213,9 +265,9 @@ $card-bg: #18181b; // zinc-900
   width: 100%;
   background-color: $accent-color;
   color: #000;
-  font-weight: 900; // black
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.1em; // widest
+  letter-spacing: 0.1em;
   padding: 1rem;
   border-radius: 6px;
   border: none;
@@ -226,42 +278,12 @@ $card-bg: #18181b; // zinc-900
   gap: 0.5rem;
   transition: all 0.2s;
 
-  &:hover {
-    background-color: #3bbbf5; // Màu gốc
-    opacity: 0.9;
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
+  &:hover { background-color: #ea580c; opacity: 0.9; }
+  &:active { transform: scale(0.98); }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
 }
 
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
-}
-$red-500: #ef4444; 
-$red-400: #f87171;
-.anotherFile{
-  margin-top: 0.75rem; /* mt-3 (3 * 0.25rem = 0.75rem) */
-  font-size: 0.75rem; /* text-xs (12px) */
-  line-height: 1rem; /* text-xs line-height */
-  color: $red-500; /* text-red-500 */
-  text-decoration: underline; /* underline */
-  z-index: 20; /* z-20 */
-  position: relative; /* relative */
-  
-  cursor: pointer; /* Thêm cái này cho giống nút bấm */
-  background: none; /* Reset style mặc định của button */
-  border: none;
-  padding: 0;
-
-  &:hover {
-    color: $red-400; /* hover:text-red-400 */
-  }
 }

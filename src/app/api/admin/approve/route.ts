@@ -45,7 +45,7 @@ export async function POST(request: Request) {
       // --- SỬA ĐOẠN NÀY: LẤY BUNNY ID ---
       bunnyVideoId: submission.bunnyVideoId, 
       // ----------------------------------
-
+      youtubeUrl: submission.youtubeUrl,
       thumbnail: {
         _type: 'image',
         asset: {

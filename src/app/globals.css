@@ -4,9 +4,9 @@
 
 :root {
   /* Màu nền đen tuyền giống SwagMedia */
-  --background: #000; 
+  --background: #000;
   /* Chữ trắng */
-  --foreground: #ffffff; 
+  --foreground: #ffffff;
 }
 
 body {
@@ -33,6 +33,7 @@ a {
   letter-spacing: 0.1em;
   background-color: #000000;
 }
-.item-menu{
+
+.item-menu {
   color: #fff;
 }

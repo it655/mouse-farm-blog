@@ -10,11 +10,14 @@ import { notFound } from "next/navigation";
 
 // Import file SCSS module
 import styles from './video-detail.module.scss';
+import dynamic from 'next/dynamic';
+const ReactPlayer = dynamic(() => import('react-player'), { ssr: true });
+
 
 // ... (Các hàm getVideo, getRelatedVideos giữ nguyên) ...
 async function getVideo(slug: string) {
     const query = `*[_type == "archiveVideo" && slug.current == "${slug}"][0] {
-    _id, title, category, recordedAt, thumbnail,bunnyVideoId,
+    _id, title, category, recordedAt, thumbnail,bunnyVideoId,youtubeUrl,
     technicalSpecs,
     "videoUrl": videoFile.asset->url,
     "size": videoFile.asset->size
@@ -54,12 +57,22 @@ export default async function VideoDetailPage({ params }: { params: Promise<{ sl
                     <div className={styles.videoWrapper}>
                         {video.bunnyVideoId ? (
                             <iframe
-                                src={`https://iframe.mediadelivery.net/embed/${process.env.NEXT_PUBLIC_BUNNY_LIBRARY_ID}/${video.bunnyVideoId}?autoplay=true&loop=false&muted=false&preload=true`}
-                                loading="lazy"
-                                style={{ border: 'none', position: 'absolute', top: 0, height: '100%', width: '100%' }}
-                                allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-                                allowFullScreen={true}
+                                src={`https://iframe.mediadelivery.net/embed/.../${video.bunnyVideoId}...`}
+                                className="absolute top-0 left-0 w-full h-full border-0"
+                                allow="autoplay; encrypted-media;"
+                                allowFullScreen
                             ></iframe>
+
+                        ) : video.youtubeUrl ? (
+                            // CASE 2: YOUTUBE (Nếu không có file gốc)
+                            <ReactPlayer
+                                src={video.youtubeUrl}
+                                width="100%"
+                                height="100%"
+                                controls={true}
+                                playing={true}
+                                config={{ youtube: { playerVars: { showinfo: 0, modestbranding: 1 } } }}
+                            />
                         ) : (
                             <div className="text-white">Video not found</div>
                         )}

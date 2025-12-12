@@ -22,7 +22,7 @@ export async function POST(request: Request) {
 });
   try {
     const body = await request.json();
-    const { title, description, bunnyVideoId, authorName, authorEmail } = body;
+    const { title, description, youtubeUrl,bunnyVideoId, authorName, authorEmail } = body;
 
     // Validate cơ bản
     if (!title || !bunnyVideoId || !authorName) {
@@ -37,6 +37,7 @@ export async function POST(request: Request) {
       bunnyVideoId,
       authorName,
       authorEmail,
+      youtubeUrl
     });
 
     return NextResponse.json({ message: 'Success', id: result._id }, { status: 201 });
