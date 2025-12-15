@@ -30,7 +30,7 @@ export default function VideoUploadForm() {
       
       if (videoId) {
         setFormData({ ...formData, bunnyVideoId: videoId, youtubeUrl: '' }); // Xóa youtube nếu có
-        toast.success('Upload thành công!');
+        toast.success('Upload successful!');
       }
     }
   };
@@ -40,8 +40,8 @@ export default function VideoUploadForm() {
     e.preventDefault();
     
     // Validate
-    if (activeTab === 'upload' && !formData.bunnyVideoId) return toast.error("Vui lòng upload video!");
-    if (activeTab === 'youtube' && !formData.youtubeUrl) return toast.error("Vui lòng dán link YouTube!");
+    if (activeTab === 'upload' && !formData.bunnyVideoId) return toast.error("Please upload the video!");
+    if (activeTab === 'youtube' && !formData.youtubeUrl) return toast.error("Please upload the video!");
 
     const toastId = toast.loading("Sending...");
 
@@ -54,12 +54,12 @@ export default function VideoUploadForm() {
 
       if (!res.ok) throw new Error('Failed');
 
-      toast.success("Gửi thành công!", { id: toastId });
+      toast.success("Sent successfully!", { id: toastId });
       // Reset form
       setFormData({ title: '', description: '', bunnyVideoId: '', youtubeUrl: '', authorName: '', authorEmail: '' });
 
     } catch (error) {
-      toast.error("Lỗi gửi form.", { id: toastId });
+      toast.error("Submission error!", { id: toastId });
     }
   };
 
@@ -115,7 +115,7 @@ export default function VideoUploadForm() {
                     <p className={styles.successText}>Video Uploaded!</p>
                     <p className={styles.fileName}>ID: {formData.bunnyVideoId}</p>
                     <button type="button" onClick={() => setFormData({ ...formData, bunnyVideoId: '' })} className={styles.deleteBtn}>
-                       Xóa / Upload lại
+                       Delete / Upload again!
                     </button>
                  </div>
                ) : (
