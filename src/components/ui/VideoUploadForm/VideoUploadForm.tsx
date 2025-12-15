@@ -68,7 +68,7 @@ export default function VideoUploadForm() {
       
       <div className={styles.header}>
         <h2>Submit Your <span>Footage</span></h2>
-        <p>Chia sẻ video săn bắn ấn tượng của bạn.</p>
+        <p>Share your impressive hunting videos.</p>
       </div>
 
       <form onSubmit={handleSubmit} className={styles.form}>
